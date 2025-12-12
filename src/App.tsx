@@ -4,9 +4,16 @@ import viteLogo from '/vite.svg'
 import './App.css'
 //import { API_URL } from "./config";
 //import { AI_URL } from "./config";
+import { API_URL } from "./config";
+
+
 
 function App() {
   const [count, setCount] = useState(0)
+
+  fetch(`${API_URL}/api/hello`)
+  .then(res => res.text())
+  .then(console.log);
 
  // async function loadData() {
  // const res = await fetch(`${API_URL}/api/hello`);
