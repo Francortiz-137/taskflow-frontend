@@ -1,10 +1,30 @@
 import { api } from "../http/api";
 import { tokenStore } from "./tokenStore";
 
+type RefreshResponse = {
+  accessToken: string;
+  refreshToken?: string;
+};
+
 type LoginResponse = {
   accessToken: string;
   refreshToken: string;
 };
+
+export async function refreshSession() {
+  const refreshToken = tokenStore.getRefreshToken();
+  if (!refreshToken) return;
+
+  const res = await api.post<RefreshResponse>("/auth/refresh", {
+    refreshToken,
+  });
+
+  tokenStore.setAccessToken(res.data.accessToken);
+
+  if (res.data.refreshToken) {
+    tokenStore.setRefreshToken(res.data.refreshToken);
+  }
+}
 
 export async function login(email: string, password: string) {
   const response = await api.post<LoginResponse>("/auth/login", {
