@@ -1,20 +1,38 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../../shared/auth/authApi";
+import { useMe } from "../../../shared/auth/authQuery";
 
 export function DashboardPage() {
+  const navigate = useNavigate();
+  const { data: me } = useMe();
+
+  async function handleLogout() {
+    await logout();
+    navigate("/login");
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 p-6">
-      <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
+      <header className="mb-6">
+        <h1 className="text-3xl font-bold">
+          Dashboard
+        </h1>
 
-      <p className="text-slate-400 mb-6">
-        Dashboard page (placeholder)
-      </p>
+        {me && (
+          <p className="text-slate-400 mt-1">
+            Bienvenido, <span className="text-slate-100 font-medium">{me.name}</span>
+            <br />
+            <span className="text-slate-100 font-medium">{me.email}</span>
+          </p>
+        )}
+      </header>
 
-      <Link
-        to="/login"
-        className="text-indigo-400 hover:underline"
+      <button
+        onClick={handleLogout}
+        className="bg-red-600 hover:bg-red-500 px-4 py-2 rounded"
       >
-        Ir a login
-      </Link>
+        Logout
+      </button>
     </div>
   );
 }

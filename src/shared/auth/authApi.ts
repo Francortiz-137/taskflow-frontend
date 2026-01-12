@@ -30,9 +30,14 @@ export async function logout() {
 
 export type MeResponse = {
   id: number;
+  name: string;
   email: string;
-  roles: Array<"ADMIN" | "USER">;
+  role: "ADMIN" | "USER";
+  createdAt: string;
+  accessToken?: string;
+  refreshToken?: string;
 };
+
 
 export async function getMe() {
   const response = await api.get<MeResponse>("/auth/me");
